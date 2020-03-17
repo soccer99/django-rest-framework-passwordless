@@ -4,6 +4,7 @@ from django.conf import settings
 import string
 from django.utils.crypto import get_random_string
 
+
 def generate_hex_token():
     return uuid.uuid1().hex
 
@@ -45,9 +46,9 @@ class AbstractBaseCallbackToken(models.Model):
 
     class Meta:
         abstract = True
-        get_latest_by = 'created_at'
-        ordering = ['-id']
-        unique_together = (('key', 'is_active'),)
+        get_latest_by = "created_at"
+        ordering = ["-id"]
+        unique_together = (("key", "is_active"),)
 
     def __str__(self):
         return str(self.key)
@@ -57,13 +58,14 @@ class CallbackToken(AbstractBaseCallbackToken):
     """
     Generates a random six digit number to be returned.
     """
-    TOKEN_TYPE_AUTH = 'AUTH'
-    TOKEN_TYPE_VERIFY = 'VERIFY'
-    TOKEN_TYPES = ((TOKEN_TYPE_AUTH, 'Auth'), (TOKEN_TYPE_VERIFY, 'Verify'))
+
+    TOKEN_TYPE_AUTH = "AUTH"
+    TOKEN_TYPE_VERIFY = "VERIFY"
+    TOKEN_TYPES = ((TOKEN_TYPE_AUTH, "Auth"), (TOKEN_TYPE_VERIFY, "Verify"))
 
     key = models.CharField(default=generate_numeric_token, max_length=6)
     type = models.CharField(max_length=20, choices=TOKEN_TYPES)
 
     class Meta(AbstractBaseCallbackToken.Meta):
-        verbose_name = 'Callback Token'
-        unique_together = ['is_active', 'key', 'type']
+        verbose_name = "Callback Token"
+        unique_together = ["is_active", "key", "type"]
